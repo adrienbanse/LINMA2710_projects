@@ -8,34 +8,35 @@
 
 SparseMatrix::SparseMatrix(int numRows, int numCols)
 {
+    assert(numRows > 0);
+    assert(numCols > 0);
     m = numRows;
     n = numCols;
     M = 0;
     nnz = 0;
-    rowidx = NULL;
-    nzval = NULL;
+    rowidx = new int[0];
+    nzval = new double[0];
 }
 
 SparseMatrix::SparseMatrix(int m, int n, int nnz, int M, int* rowidx, double* nzval)
 {
+    assert(m > 0);
+    assert(n > 0);
     this->m = m;
     this->n = n;
     this->M = M;
     this->nnz = nnz;
-    if (this->rowidx != NULL)
-        delete[] this->rowidx;
     this->rowidx = new int[n * M];
-    if (this->nzval != NULL)
-        delete[] this->nzval;
     this->nzval = new double[n * M];
-    for (int i = 0; i < n * M; i++){
-        this->rowidx[i] = rowidx[i];
-        this->nzval[i] = nzval[i];
-    }
+    memcpy(this->rowidx, rowidx, n * M * sizeof(int));
+    memcpy(this->nzval, nzval, n * M * sizeof(double));
 }
 
 SparseMatrix::SparseMatrix(int nnz, int const *ridx, int const *cidx, double const *nzval, int m, int n)
 {   
+    assert(m > 0);
+    assert(n > 0);
+
     this->nnz = nnz;    
     this->m = m;
     this->n = n;
@@ -82,15 +83,13 @@ SparseMatrix::SparseMatrix(int nnz, int const *ridx, int const *cidx, double con
 
 SparseMatrix::~SparseMatrix()
 {
-    if (rowidx != NULL)
-        delete[] rowidx;
-    if (nzval != NULL)
-        delete[] nzval;
+    delete[] rowidx;
+    delete[] nzval;
 }
 
 int SparseMatrix::GetSize(int which) const
 {
-    // assert(which == 1 || which == 2);
+    assert(which == 1 || which == 2);
     if (which == 1)
         return m;
     return n;
@@ -99,21 +98,19 @@ int SparseMatrix::GetSize(int which) const
 SparseMatrix& SparseMatrix::operator=(const SparseMatrix& otherMatrix)
 {   
     if (n * M != otherMatrix.n * otherMatrix.M){
-        if (rowidx != NULL)
-            delete[] rowidx;
+        delete[] rowidx;
         rowidx = new int[otherMatrix.n * otherMatrix.M];
-        if (nzval != NULL)
-            delete[] nzval;
+        delete[] nzval;
         nzval = new double[otherMatrix.n * otherMatrix.M];
     }
     M = otherMatrix.M;
     m = otherMatrix.GetSize(1);
     n = otherMatrix.GetSize(2);
     nnz = otherMatrix.nnz;
-    for (int i = 0; i < n * M; i++){
-        rowidx[i] = otherMatrix.rowidx[i];
-        nzval[i] = otherMatrix.nzval[i];
-    }
+    
+    memcpy(rowidx, otherMatrix.rowidx, n * M * sizeof(int));
+    memcpy(nzval, otherMatrix.nzval, n * M * sizeof(double));
+
     return *this;
 }
 
@@ -141,6 +138,8 @@ SparseMatrix SparseMatrix::operator*(double a) const
 
 Vector operator*(const SparseMatrix& m, const Vector& v)
 {
+    assert(m.n == v.GetSize());
+
     Vector res(m.m);
     int i, j, k;
 
