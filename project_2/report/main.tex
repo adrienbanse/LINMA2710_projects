@@ -7,6 +7,8 @@
 \usepackage{color}
 \usepackage{wrapfig}
 \usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
 
 \pagestyle{fancy}
 
@@ -16,15 +18,29 @@
 \rhead{Adrien Banse (12501700)}
 \cfoot{}
 
-\textbf{Problem considered}
-
-Consider the following diffusion equation: 
+\section{Problem considered}
+For  some function $u: \Omega \to \mathbb{R}$, consider the following differential equation:
 \begin{equation}
-	
+\label{PDE}
+	\frac{\partial u(x, y, t)}{\partial t} = \alpha \left( \frac{\partial^2 u(x, y, t)}{\partial x^2} + \frac{\partial^2 u(x, y, t)}{\partial y^2} \right).
+\end{equation}
+Equation~\eqref{PDE} is a special case of the diffusion problem considered in the statement, with $D(x, y) = \alpha$ and $f(x, y) = 0$ for all $x, y$. We consider the following values for the problem: 
+\begin{itemize}
+	\item $\Omega = [0, 300] \times [0, 50] \times [0, 50]$,
+	\item $\alpha = 2$.
+\end{itemize}
+Note that a physical way to interpret Equation~\eqref{PDE} is to consider the diffusion of \emph{heat} on a 2D plate of dimensions 50[m] $\times$ 50[m] during 300[s]. $u(t, x, y)$ is thus the temperature in [K] at time $t$[s] at the point at $x$[m] of the origin of the plate in one direction and $y$[m] of the origin in the other direction\footnote{[m] stands for \emph{meters}, [s] for \emph{seconds} and [K] for \emph{Kelvin}.}. 
+
+Consider that, with the same notations as in the statement, we choose somes values of $\Delta x$, $\Delta y$, then the explicit scheme is numerically stable if \cite[Equations (3.5), (3.6)]{morton_mayers_2005}:
+\begin{equation}
+	yo
 \end{equation}
 
-\textbf{Results}
+\section{Results}
 
 \textcolor{red}{TODO}
+
+\bibliographystyle{plain} % We choose the "plain" reference style
+\bibliography{ref} % Entries are in the refs.bib file
 
 \end{document}

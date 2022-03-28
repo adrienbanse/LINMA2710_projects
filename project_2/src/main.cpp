@@ -32,7 +32,7 @@ int main() {
     double alpha = 2.;
 
     double dx = 1., dy = 1.;
-    double dt = dx * dy / (4 * alpha);
+    double dt = 1 / (2 * alpha) * dx * dx * dy * dy / (dx * dx + dy * dy);
 
     int nx = (int) Lx / dx;
     int ny = (int) Ly / dy;
@@ -62,6 +62,6 @@ int main() {
     for (int i = 0; i <= nt; i++) {
         delete sol[i];
     }
-    
+
     return EXIT_SUCCESS;
 }
