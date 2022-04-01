@@ -105,8 +105,10 @@ void EulerDiffusionSolver::solve(Vector **sol){
     *(sol[0]) = sol0;
 
     // temporal iterations
-    for (k = 1; k <= nt; k++)
+    for (k = 1; k <= nt; k++){
         *(sol[k]) = *(A) * *(sol[k - 1]) + *(b);
+        printf("%d / %d\n", k, nt);
+    }
 
     // free A and b
     delete A;

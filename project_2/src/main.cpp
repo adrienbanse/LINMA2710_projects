@@ -31,34 +31,40 @@ int main() {
     double Lt = 300.;
     double alpha = 2.;
 
-    double dx = 1., dy = 1.;
-    double dt = 1 / (2 * alpha) * dx * dx * dy * dy / (dx * dx + dy * dy);
+    int i = 3; int nt = 2400 * pow(2., i);
+    int j = 4; int nx = 8 * pow(2., j);
+    int k = 3; int ny = 8 * pow(2., k);
 
-    int nx = (int) Lx / dx;
-    int ny = (int) Ly / dy;
-    int nt = (int) Lt / dt;
+    double dx = Lx / nx;
+    double dy = Ly / ny;
+    double dt = Lt / nt;
+
     int N = (nx+1) * (ny+1);
 
     Vector *sol[nt+1];
-    for (int i = 0; i <= nt; i++) {
+    for (int i = 0; i <= nt; i++)
         sol[i] = new Vector(N);
-    }
 
     // Your problem here (we use lambda function but not mandatory)
     std::function<double(double,double)> getD = [](double, double) {return 2.;};
     std::function<double(double,double)> getInitial = [](double, double) {return 0.;};
     std::function<double(double,double)> getf = [](double, double) {return 0.;};
 
-    std::function<double(double)> getBoundaryx0 = [](double) {return 100.;};;
-    std::function<double(double)> getBoundaryx1 = [](double) {return 0.;};;
-    std::function<double(double)> getBoundaryy0 = [](double) {return 0.;};;
-    std::function<double(double)> getBoundaryy1 = [](double) {return 0.;};;
+    std::function<double(double)> getBoundaryx0 = [](double) {return 100.;};
+    std::function<double(double)> getBoundaryx1 = [](double) {return 0.;};
+    std::function<double(double)> getBoundaryy0 = [](double) {return 0.;};
+    std::function<double(double)> getBoundaryy1 = [](double) {return 0.;};
 
     DiffusionProblem p(Lt, Lx, Ly, getD, getInitial, getf, getBoundaryx0, getBoundaryx1, getBoundaryy0, getBoundaryy1);
     
     EulerDiffusionSolver solver(nt, nx, ny, p);
     solver.solve(sol);
-    write_tensor("sol.txt", sol, nt, nx, ny);
+
+    char filename[1024];
+    sprintf(filename, "sol_%d_%d_%d.txt", nx, ny, nt);
+
+    //write_tensor(filename, sol, nt, nx, ny);
+    write_tensor(filename, sol, nt, nx, ny);
     for (int i = 0; i <= nt; i++) {
         delete sol[i];
     }
