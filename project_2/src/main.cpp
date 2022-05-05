@@ -31,9 +31,9 @@ int main() {
     double Lt = 300.;
     double alpha = 2.;
 
-    int i = 3; int nt = 2400 * pow(2., i);
-    int j = 4; int nx = 8 * pow(2., j);
-    int k = 3; int ny = 8 * pow(2., k);
+    int i = 1; int nt = 2400 * pow(2., i);
+    int j = 1; int nx = 8 * pow(2., j);
+    int k = 1; int ny = 8 * pow(2., k);
 
     double dx = Lx / nx;
     double dy = Ly / ny;
